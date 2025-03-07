@@ -171,3 +171,65 @@ public class CardCollection {
         }
     }
 }
+
+
+
+
+
+
+#### HARD CODE #####
+
+
+
+import java.util.concurrent.locks.ReentrantLock;
+
+class TicketBookingSystem {
+    private int availableSeats = 10;
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void bookSeat(String customerType) {
+        lock.lock();
+        try {
+            if (availableSeats > 0) {
+                System.out.println(customerType + " booked seat " + availableSeats);
+                availableSeats--;
+            } else {
+                System.out.println("No seats available.");
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+class Customer extends Thread {
+    TicketBookingSystem system;
+    String customerType;
+
+    Customer(TicketBookingSystem system, String customerType, int priority) {
+        this.system = system;
+        this.customerType = customerType;
+        setPriority(priority);
+    }
+
+    public void run() {
+        system.bookSeat(customerType);
+    }
+}
+
+public class TicketBooking {
+    public static void main(String[] args) {
+        TicketBookingSystem system = new TicketBookingSystem();
+
+        Customer vip1 = new Customer(system, "VIP Customer 1", Thread.MAX_PRIORITY);
+        Customer vip2 = new Customer(system, "VIP Customer 2", Thread.MAX_PRIORITY);
+        Customer regular1 = new Customer(system, "Regular Customer 1", Thread.NORM_PRIORITY);
+        Customer regular2 = new Customer(system, "Regular Customer 2", Thread.NORM_PRIORITY);
+
+        vip1.start();
+        vip2.start();
+        regular1.start();
+        regular2.start();
+    }
+}
+
