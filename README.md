@@ -110,3 +110,70 @@ public class EmployeeManager {
         }
     }
 }
+
+
+
+
+
+
+
+
+### MEDIUM CODE ####
+
+
+import java.util.*;
+
+class Card {
+    String symbol;
+    String value;
+
+    Card(String symbol, String value) {
+        this.symbol = symbol;
+        this.value = value;
+    }
+
+    public String toString() {
+        return value + " of " + symbol;
+    }
+}
+
+public class CardCollection {
+    static HashMap<String, ArrayList<Card>> cardMap = new HashMap<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void addCard() {
+        System.out.print("Enter Card Symbol (e.g., Hearts, Spades): ");
+        String symbol = scanner.next();
+        System.out.print("Enter Card Value (e.g., Ace, King, 2): ");
+        String value = scanner.next();
+
+        cardMap.putIfAbsent(symbol, new ArrayList<>());
+        cardMap.get(symbol).add(new Card(symbol, value));
+
+        System.out.println("Card added successfully!");
+    }
+
+    public static void findCardsBySymbol() {
+        System.out.print("Enter Symbol to search: ");
+        String symbol = scanner.next();
+        if (cardMap.containsKey(symbol)) {
+            System.out.println("Cards in " + symbol + ": " + cardMap.get(symbol));
+        } else {
+            System.out.println("No cards found for this symbol.");
+        }
+    }
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n1. Add Card\n2. Find Cards by Symbol\n3. Exit");
+            System.out.print("Enter choice: ");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1: addCard(); break;
+                case 2: findCardsBySymbol(); break;
+                case 3: System.exit(0);
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
